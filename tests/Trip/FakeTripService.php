@@ -12,10 +12,12 @@ class FakeTripService extends TripService
 {
     /** @var User|null */
     private $loggedUser;
+    private $trips;
 
-    public function __construct($user = null)
+    public function __construct($user = null, $trips = null)
     {
         $this->loggedUser = $user;
+        $this->trips = $trips;
     }
 
     protected function getLoggedUser()
@@ -23,6 +25,9 @@ class FakeTripService extends TripService
         return $this->loggedUser;
     }
 
-
+    protected function findTripsByUser(User $user)
+    {
+        return $this->trips;
+    }
 }
 

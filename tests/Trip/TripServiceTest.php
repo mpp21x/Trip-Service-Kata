@@ -4,6 +4,7 @@ namespace Test\Trip;
 
 
 use App\Exception\UserNotLoggedInException;
+use App\Trip\Trip;
 use App\Trip\TripService;
 use App\User\User;
 use Mockery;
@@ -44,6 +45,19 @@ class TripServiceTest extends TestCase
         $this->assertEmpty($nullTrips);
     }
 
+    /** @test */
+    public function isTripsWhenLoggedUserIsFriend()
+    {
+        $user = $this->createMockUser();
+        $this->tripService = new FakeTripService($user, [$this->createMockTrip()]);
+
+        $this->user
+            ->shouldReceive("getFriends")
+            ->andReturn([$user]);
+        $trips = $this->tripService->getTripsByUser($this->user);
+        $this->assertNotEmpty($trips);
+    }
+
     protected function setUp(): void
     {
         $this->user = $this->createMockUser();
@@ -55,5 +69,13 @@ class TripServiceTest extends TestCase
     protected function createMockUser()
     {
         return Mockery::mock(User::class);
+    }
+
+    /**
+     * @return Trip|Mockery\LegacyMockInterface|Mockery\MockInterface
+     */
+    protected function createMockTrip()
+    {
+        return Mockery::mock(Trip::class);
     }
 }
