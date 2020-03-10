@@ -11,3 +11,5 @@
     * `isNotTripsWhenLoggedUserIsNotFriend`：當登入的使用者不等於參數 `$user` 的好友，也就是 `$user->getFriends()` 當中不存在 `$loggedUser` 時，則**不應該**回傳 變數 `$tripList`。 
     * `isTripsWhenLoggedUserIsFriend`：當登入的使用者等於參數 `$user` 的好友，則**應該**回傳 變數 `$tripList`。
  
+## 備註
+* 在不影響 `src/Trip/TripService` 中的 `getTripsByUser` 的邏輯之下，進行重構。

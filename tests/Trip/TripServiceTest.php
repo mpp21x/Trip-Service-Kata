@@ -14,6 +14,10 @@ class TripServiceTest extends TestCase
 {
     /*** @var TripService */
     private $tripService;
+    /**
+     * @var User|Mockery\LegacyMockInterface|Mockery\MockInterface
+     */
+    private $user;
 
     /**
      * @test
@@ -21,12 +25,35 @@ class TripServiceTest extends TestCase
     public function throwExceptionWhenUserIsNotLoggedIn()
     {
         $this->expectException(UserNotLoggedInException::class);
-        $user = Mockery::mock(User::class);
-        $this->tripService->getTripsByUser($user);
+
+        $this->tripService = new FakeTripService();
+        $this->tripService->getTripsByUser($this->user);
+    }
+
+    /** @test */
+    public function isNotTripsWhenLoggedUserIsNotFriend()
+    {
+        $this->tripService = new FakeTripService($this->createMockUser());
+
+        $userWithoutAnyFriend = new User("");
+        $this->user
+            ->shouldReceive("getFriends")
+            ->andReturn([$userWithoutAnyFriend]);
+        $nullTrips = $this->tripService->getTripsByUser($this->user);
+
+        $this->assertEmpty($nullTrips);
     }
 
     protected function setUp(): void
     {
-        $this->tripService = new FakeTripService();
+        $this->user = $this->createMockUser();
+    }
+
+    /**
+     * @return User|Mockery\LegacyMockInterface|Mockery\MockInterface
+     */
+    protected function createMockUser()
+    {
+        return Mockery::mock(User::class);
     }
 }
