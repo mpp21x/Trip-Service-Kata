@@ -37,9 +37,7 @@ class TripServiceTest extends TestCase
         $this->tripService = new FakeTripService($this->createMockUser());
 
         $userWithoutAnyFriend = new User("");
-        $this->user
-            ->shouldReceive("getFriends")
-            ->andReturn([$userWithoutAnyFriend]);
+        $this->setUserMockGetFriendMethod($userWithoutAnyFriend);
         $nullTrips = $this->tripService->getTripsByUser($this->user);
 
         $this->assertEmpty($nullTrips);
@@ -51,9 +49,7 @@ class TripServiceTest extends TestCase
         $user = $this->createMockUser();
         $this->tripService = new FakeTripService($user, [$this->createMockTrip()]);
 
-        $this->user
-            ->shouldReceive("getFriends")
-            ->andReturn([$user]);
+        $this->setUserMockGetFriendMethod($user);
         $trips = $this->tripService->getTripsByUser($this->user);
         $this->assertNotEmpty($trips);
     }
@@ -77,5 +73,15 @@ class TripServiceTest extends TestCase
     protected function createMockTrip()
     {
         return Mockery::mock(Trip::class);
+    }
+
+    /**
+     * @param $user
+     */
+    protected function setUserMockGetFriendMethod($user): void
+    {
+        $this->user
+            ->shouldReceive("getFriends")
+            ->andReturn([$user]);
     }
 }
