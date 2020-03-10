@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":216:{a:2:{s:7:"defects";a:1:{s:45:"Test\Trip\TripServiceTest::testGetTripsByUser";i:4;}s:5:"times";a:1:{s:45:"Test\Trip\TripServiceTest::testGetTripsByUser";d:0.008000000000000000166533453693773481063544750213623046875;}}}
