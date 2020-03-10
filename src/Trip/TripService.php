@@ -5,6 +5,7 @@ namespace App\Trip;
 use App\Exception\UserNotLoggedInException;
 use App\User\User;
 use App\User\UserSession;
+use function in_array;
 
 class TripService
 {
@@ -13,24 +14,16 @@ class TripService
      * @return Trip[]|array
      * @throws UserNotLoggedInException
      */
-    public function getTripsByUser(User $user) {
-        $tripList = [];
+    public function getTripsByUser(User $user)
+    {
         $loggedUser = $this->getLoggedUser();
-        $isFriend = false;
-        if ($loggedUser != null) {
-            foreach ($user->getFriends() as $friend) {
-                if ($friend == $loggedUser) {
-                    $isFriend = true;
-                    break;
-                }
-            }
-            if ($isFriend) {
-                $tripList = $this->findTripsByUser($user);
-            }
-            return $tripList;
-        } else {
+        if ($loggedUser == null) {
             throw new UserNotLoggedInException();
         }
+
+        $tripList = in_array($loggedUser, $user->getFriends()) ?
+            $this->findTripsByUser($user) : [];
+        return $tripList;
     }
 
     /**
