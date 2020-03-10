@@ -2,7 +2,11 @@
 
 namespace Test\Trip;
 
+
+use App\Exception\UserNotLoggedInException;
 use App\Trip\TripService;
+use App\User\User;
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 
@@ -11,13 +15,18 @@ class TripServiceTest extends TestCase
     /*** @var TripService */
     private $tripService;
 
-    public function testGetTripsByUser()
+    /**
+     * @test
+     */
+    public function throwExceptionWhenUserIsNotLoggedIn()
     {
-        // TODO 開始練習！
+        $this->expectException(UserNotLoggedInException::class);
+        $user = Mockery::mock(User::class);
+        $this->tripService->getTripsByUser($user);
     }
 
     protected function setUp(): void
     {
-        $this->tripService = new TripService;
+        $this->tripService = new FakeTripService();
     }
 }

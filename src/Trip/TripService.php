@@ -15,7 +15,7 @@ class TripService
      */
     public function getTripsByUser(User $user) {
         $tripList = [];
-        $loggedUser = UserSession::getInstance()->getLoggedUser();
+        $loggedUser = $this->getLoggedUser();
         $isFriend = false;
         if ($loggedUser != null) {
             foreach ($user->getFriends() as $friend) {
@@ -31,5 +31,13 @@ class TripService
         } else {
             throw new UserNotLoggedInException();
         }
+    }
+
+    /**
+     * @return User|null
+     */
+    protected function getLoggedUser()
+    {
+        return UserSession::getInstance()->getLoggedUser();
     }
 }
